@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generated Question Paper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>📘 AI Generated Question Paper</h1>
+
+    {% if questions and questions|length > 0 %}
+        <div class="questions">
+
+            {% for q in questions %}
+                <div class="card">
+                    <div class="question-text">
+                        {{ loop.index }}. {{ q.question }}
+                    </div>
+
+                    <div class="difficulty {{ q.difficulty }}">
+                        Difficulty: {{ q.difficulty|capitalize }}
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    {% else %}
+        <p style="text-align:center; color:#dc2626;">
+            No questions were generated. Please try again.
+        </p>
+    {% endif %}
+
+    <div class="actions" style="text-align:center; margin-top:40px;">
+
+        <a href="/download">
+            <button class="btn">⬇ Download PDF</button>
+        </a>
+
+        <a href="/">
+            <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); margin-left:15px;">
+                🔄 Generate Another
+            </button>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
