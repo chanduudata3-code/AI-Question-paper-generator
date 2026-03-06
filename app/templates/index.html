@@ -1,30 +1,48 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Question Paper Generator</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Question Paper Generator</title>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 
 <body>
 
-<div class="container">
+<div class="background"></div>
 
-<h1>AI Question Paper Generator</h1>
+<div class="card">
 
-<form action="/generate" method="POST">
+<h1>🤖 AI Question Paper Generator</h1>
 
-<input type="text" name="topic" placeholder="Enter Topic" required>
+<p class="subtitle">
+Generate exam-ready questions instantly using AI
+</p>
 
-<div class="marks">
+<form action="/generate-topic" method="POST">
 
+<input type="text" name="topic" placeholder="Enter Topic (Example: Cloud Computing)" required>
+
+<div class="marks-grid">
+
+<div class="input-group">
 <label>2 Marks</label>
-<input type="number" name="two" value="5">
+<input type="number" name="two_marks" value="5">
+</div>
 
+<div class="input-group">
 <label>5 Marks</label>
-<input type="number" name="five" value="3">
+<input type="number" name="five_marks" value="3">
+</div>
 
+<div class="input-group">
 <label>10 Marks</label>
-<input type="number" name="ten" value="2">
+<input type="number" name="ten_marks" value="2">
+</div>
 
 </div>
 
@@ -35,4 +53,5 @@
 </div>
 
 </body>
+
 </html>
