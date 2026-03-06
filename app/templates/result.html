@@ -1,50 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Generated Question Paper</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<title>Result</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
 <div class="container">
 
-    <h1>📘 AI Generated Question Paper</h1>
+<h1>Generated Questions</h1>
 
-    {% if questions and questions|length > 0 %}
-        <div class="questions">
+{% for q in questions %}
 
-            {% for q in questions %}
-                <div class="card">
-                    <div class="question-text">
-                        {{ loop.index }}. {{ q.question }}
-                    </div>
+<div class="card
+{% if q.marks == '2' %}two{% endif %}
+{% if q.marks == '5' %}five{% endif %}
+{% if q.marks == '10' %}ten{% endif %}
+">
 
-                    <div class="difficulty {{ q.difficulty }}">
-                        Difficulty: {{ q.difficulty|capitalize }}
-                    </div>
-                </div>
-            {% endfor %}
+<b>{{ q.marks }} Marks</b><br>
+{{ q.question }}
 
-        </div>
-    {% else %}
-        <p style="text-align:center; color:#dc2626;">
-            No questions were generated. Please try again.
-        </p>
-    {% endif %}
+</div>
 
-    <div class="actions" style="text-align:center; margin-top:40px;">
+{% endfor %}
 
-        <a href="/download">
-            <button class="btn">⬇ Download PDF</button>
-        </a>
-
-        <a href="/">
-            <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); margin-left:15px;">
-                🔄 Generate Another
-            </button>
-        </a>
-
-    </div>
+<a href="/download">
+<button>Download PDF</button>
+</a>
 
 </div>
 

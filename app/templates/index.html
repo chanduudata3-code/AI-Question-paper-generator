@@ -1,48 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Question Paper Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<title>Question Paper Generator</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
 <div class="container">
 
-    <h1>AI Question Paper Generator</h1>
+<h1>AI Question Paper Generator</h1>
 
-    <div class="section">
-        <h3>📄 Generate from PDF</h3>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file" required>
-            <button type="submit" class="btn">Generate from PDF</button>
-        </form>
-    </div>
+<form action="/generate" method="POST">
 
-    <div class="section">
-       <h3>🔍 Generate from Topic</h3>
-<form action="/generate-topic" method="POST">
+<input type="text" name="topic" placeholder="Enter Topic" required>
 
-    <input type="text" name="topic"
-           placeholder="Enter Topic (e.g., Cloud Computing Unit 1)"
-           required>
+<div class="marks">
 
-    <div class="difficulty-inputs">
-        <label>Easy:</label>
-        <input type="number" name="easy" min="0" value="3">
+<label>2 Marks</label>
+<input type="number" name="two" value="5">
 
-        <label>Medium:</label>
-        <input type="number" name="medium" min="0" value="2">
+<label>5 Marks</label>
+<input type="number" name="five" value="3">
 
-        <label>Hard:</label>
-        <input type="number" name="hard" min="0" value="1">
-    </div>
+<label>10 Marks</label>
+<input type="number" name="ten" value="2">
 
-    <button type="submit" class="btn">
-        Generate Question Paper
-    </button>
+</div>
+
+<button type="submit">Generate Question Paper</button>
 
 </form>
-    </div>
 
 </div>
 
