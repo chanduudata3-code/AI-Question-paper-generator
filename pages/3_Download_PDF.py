@@ -8,7 +8,7 @@ from utils import generate_pdf
 
 st.title("Download Question Paper")
 
-if "questions" not in st.session_state:
+if "questions" not in st.session_state or not st.session_state["questions"]:
     st.warning("Generate questions first.")
 else:
 

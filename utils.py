@@ -1,44 +1,89 @@
+import re
 import random
+from PyPDF2 import PdfReader
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 import tempfile
 
 
-def generate_questions(topic, two, five, ten):
+# 🔹 Extract text
+def extract_text_from_pdf(file):
+    reader = PdfReader(file)
+    text = ""
 
-    two_templates = [
-        f"Define {topic}.",
-        f"List two advantages of {topic}.",
-        f"Write short notes on {topic}.",
-        f"State the purpose of {topic}.",
-        f"What is meant by {topic}?"
-    ]
+    for page in reader.pages:
+        text += page.extract_text() or ""
 
-    five_templates = [
-        f"Explain the concept of {topic}.",
-        f"Describe the features of {topic}.",
-        f"Discuss the working of {topic}.",
-        f"Explain the structure of {topic}.",
-        f"Illustrate the applications of {topic}."
-    ]
+    return text
 
-    ten_templates = [
-        f"Explain {topic} in detail with examples.",
-        f"Discuss advantages and limitations of {topic}.",
-        f"Explain the architecture of {topic}.",
-        f"Describe real-world applications of {topic}.",
-        f"Explain {topic} with a detailed diagram."
-    ]
+
+# 🔹 Clean + split text
+def preprocess_text(text):
+    sentences = re.split(r'\.|\n', text)
+    sentences = [s.strip() for s in sentences if len(s) > 20]
+    return list(set(sentences))  # remove duplicates
+
+
+# 🔹 Generate questions (YOUR AI)
+def generate_questions(text, two, five, ten):
+
+    sentences = preprocess_text(text)
 
     questions = []
 
-    questions += [{"question": q, "marks": "2"} for q in random.sample(two_templates, min(two, len(two_templates)))]
-    questions += [{"question": q, "marks": "5"} for q in random.sample(five_templates, min(five, len(five_templates)))]
-    questions += [{"question": q, "marks": "10"} for q in random.sample(ten_templates, min(ten, len(ten_templates)))]
+    # question templates
+    def make_2_mark(s):
+        return random.choice([
+            f"What is {s}?",
+            f"Define {s}.",
+            f"Write short note on {s}.",
+            f"List key points of {s}."
+        ])
+
+    def make_5_mark(s):
+        return random.choice([
+            f"Explain {s}.",
+            f"Describe {s} in detail.",
+            f"Discuss the concept of {s}.",
+            f"Write about {s} with examples."
+        ])
+
+    def make_10_mark(s):
+        return random.choice([
+            f"Explain {s} in detail with diagram.",
+            f"Discuss advantages and applications of {s}.",
+            f"Write an essay on {s}.",
+            f"Explain {s} with real-world examples."
+        ])
+
+    used = set()
+
+    def get_unique_sentence():
+        for s in sentences:
+            if s not in used:
+                used.add(s)
+                return s
+        return random.choice(sentences)
+
+    # 2 marks
+    for _ in range(int(two)):
+        s = get_unique_sentence()
+        questions.append({"question": make_2_mark(s), "marks": "2"})
+
+    # 5 marks
+    for _ in range(int(five)):
+        s = get_unique_sentence()
+        questions.append({"question": make_5_mark(s), "marks": "5"})
+
+    # 10 marks
+    for _ in range(int(ten)):
+        s = get_unique_sentence()
+        questions.append({"question": make_10_mark(s), "marks": "10"})
 
     return questions
 
 
+# 🔹 PDF generation
 def generate_pdf(questions):
 
     temp_file = tempfile.NamedTemporaryFile(delete=False)
@@ -48,10 +93,9 @@ def generate_pdf(questions):
     y = 800
 
     c.setFont("Helvetica-Bold", 16)
-    c.drawString(200, y, "QUESTION PAPER")
+    c.drawString(180, y, "QUESTION PAPER")
 
     y -= 40
-
     c.setFont("Helvetica", 12)
 
     for i, q in enumerate(questions, 1):
@@ -59,7 +103,6 @@ def generate_pdf(questions):
         text = f"{i}. ({q['marks']} Marks) {q['question']}"
 
         c.drawString(50, y, text)
-
         y -= 25
 
         if y < 100:
