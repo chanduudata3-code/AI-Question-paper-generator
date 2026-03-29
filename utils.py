@@ -24,11 +24,10 @@ def preprocess_text(text):
     return list(set(sentences))  # remove duplicates
 
 
-# 🔹 Generate questions (YOUR AI)
+# 🔹 Generate questions
 def generate_questions(text, two, five, ten):
 
     sentences = preprocess_text(text)
-
     questions = []
 
     # question templates
@@ -108,6 +107,7 @@ def generate_pdf(questions):
         if y < 100:
             c.showPage()
             y = 800
+            c.setFont("Helvetica", 12)  # reset font after new page
 
     c.save()
 
